@@ -1,0 +1,6 @@
+*.vscode*
+*.a*
+*.o*
+*.elf*
+*.img*
+*.hdd*
