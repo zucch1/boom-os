@@ -1,6 +1,8 @@
+#pragma once
 #include "stivale2.h"
 #include <stddef.h>
-
+#include "printk.h"
+#include "pfalloc.h"
 struct KernelInfo{
 
 };

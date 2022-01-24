@@ -1,7 +1,7 @@
 #include "util/string.h"
 
-char ToStrBuf[32];
-char * to_string(int64_t value){
+char ToStrBuf[128];
+const char * to_string(int64_t value){
     uint8_t isNeg = 0;
     if(value<0){
         isNeg = 1;
@@ -27,15 +27,77 @@ char * to_string(int64_t value){
     return ToStrBuf;
 }
 
+char HexToStrBuf64[64];
+const char * to_hstring64(uint64_t value){
+    uint64_t * valPtr = &value;
+    uint8_t * ptr;
+    uint8_t temp;
+    uint8_t size = 8*2 - 1;
+    for(uint8_t i = 0; i < size; i++){
+        ptr = ((uint8_t*)valPtr + i);
+        temp = ((*ptr & 0xf0) >> 4);
+        HexToStrBuf64[size - (i*2 + 1)] = temp + (temp>9 ? 55:'0');
+        temp = (*ptr & 0x0f);
+        HexToStrBuf64[size - (i*2 + 0)] = temp + (temp>9 ? 55:'0');
 
-char * to_hstring(uint64_t value, uint64_t length = 8){
-    
+    }
+    HexToStrBuf64[size + 1] = 0;
+    return HexToStrBuf64;
 }
 
+char HexToStrBuf32[64];
+const char * to_hstring32(uint32_t value){
+    uint32_t * valPtr = &value;
+    uint8_t * ptr;
+    uint8_t temp;
+    uint8_t size = 4*2 - 1;
+    for(uint8_t i = 0; i < size; i++){
+        ptr = ((uint8_t*)valPtr + i);
+        temp = ((*ptr & 0xf0) >> 4);
+        HexToStrBuf32[size - (i*2 + 1)] = temp + (temp>9 ? 55:'0');
+        temp = (*ptr & 0x0f);
+        HexToStrBuf32[size - (i*2 + 0)] = temp + (temp>9 ? 55:'0');
 
+    }
+    HexToStrBuf32[size + 1] = 0;
+    return HexToStrBuf32;
+}
 
+char HexToStrBuf16[64];
+const char * to_hstring16(uint16_t value){
+    uint16_t * valPtr = &value;
+    uint8_t * ptr;
+    uint8_t temp;
+    uint8_t size = 2*2 - 1;
+    for(uint8_t i = 0; i < size; i++){
+        ptr = ((uint8_t*)valPtr + i);
+        temp = ((*ptr & 0xf0) >> 4);
+        HexToStrBuf16[size - (i*2 + 1)] = temp + (temp>9 ? 55:'0');
+        temp = (*ptr & 0x0f);
+        HexToStrBuf16[size - (i*2 + 0)] = temp + (temp>9 ? 55:'0');
 
+    }
+    HexToStrBuf16[size + 1] = 0;
+    return HexToStrBuf16;
+}
 
+char HexToStrBuf8[64];
+const char * to_hstring8(uint8_t value){
+    uint8_t * valPtr = &value;
+    uint8_t * ptr;
+    uint8_t temp;
+    uint8_t size = 1*2 - 1;
+    for(uint8_t i = 0; i < size; i++){
+        ptr = ((uint8_t*)valPtr + i);
+        temp = ((*ptr & 0xf0) >> 4);
+        HexToStrBuf8[size - (i*2 + 1)] = temp + (temp > 9 ? 55 : '0');
+        temp = (*ptr & 0x0f);
+        HexToStrBuf8[size - (i*2 + 0)] = temp + (temp > 9 ? 55 : '0');
+
+    }
+    HexToStrBuf8[size + 1] = 0;
+    return HexToStrBuf8;
+}
 
 // strlen.c
 size_t strlen(const char * str){

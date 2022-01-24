@@ -6,4 +6,4 @@
 
 
 // Memory Size in BYTES
-size_t MemorySize(stivale2_struct*);
+size_t GetMemorySize(stivale2_struct*);
