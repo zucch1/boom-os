@@ -14,6 +14,8 @@ bool lock_frames(void * address, uint64_t n_frames);
 bool free_frame(void * address);
 bool free_frames(void * address, uint64_t n_frames);
 
+void * request_frame();
+// void * request_frames(); //Continious frames
 
 size_t GetUsedMemory();
 size_t GetFreeMemory();

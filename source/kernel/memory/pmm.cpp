@@ -1,6 +1,6 @@
 /* LICENSING INFO*/
 /* pmm description */
-
+// extern uint64_t _KernelStart;
 
 #include "pmm.h"
 #include "bitmap.h"
@@ -86,6 +86,7 @@ bool unreserve_frames(void * address, uint64_t n_frames){
     return true;
 }
 
+//=---------------------------------------------------------=
 void init_pmm(stivale2_struct * bootinfo){
     if(pmm_init) return;
     pmm_init = true;
@@ -97,17 +98,32 @@ void init_pmm(stivale2_struct * bootinfo){
         }
     }
     pmm_bitmap = bitmap((uint8_t*)largest_seg, get_memory_size(bootinfo)/4096 + 1);
-    memset(pmm_bitmap.buffer, 1, get_memory_size(bootinfo)/4096/8+1);   // Set the buffer to all 1s (reserve all pages)
-    ReservedMemory = get_memory_size(bootinfo);
-    unreserve_frames(pmm_bitmap.buffer, pmm_bitmap.n_bytes/0x1000);
+    memset(pmm_bitmap.buffer, 0, get_memory_size(bootinfo)/4096/8+1);   // Set the buffer to all 1s (reserve all pages)
+    FreeMemory = get_memory_size(bootinfo);
     lock_frames(pmm_bitmap.buffer, pmm_bitmap.n_bytes/0x1000);
     for(uint16_t i = 0; i < mmap->entries; i++){
-        if(mmap->memmap[i].type == USABLE){
-            unreserve_frames((void*)mmap->memmap[i].base, mmap->memmap[i].length/0x1000);
+        if(mmap->memmap[i].type != USABLE){
+            reserve_frames((void*)mmap->memmap[i].base, mmap->memmap[i].length/0x1000);
         } 
     }
     
 }
+//=-----------------------------------------------------------=
+
+// Searches linearly from last requested page;
+void * request_frame(){
+    for(uint64_t i = 0; i < pmm_bitmap.n_bytes*8; i++){
+        uint64_t address = 0;
+        if(pmm_bitmap[i] == false){
+            address = i*4096;
+            lock_frame((void*)address);
+            return (void*)address;
+        }
+    }
+    return nullptr;
+    // Page Swapping
+}
+
 
 size_t GetUsedMemory(){
     return UsedMemory;
