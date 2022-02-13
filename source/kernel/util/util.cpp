@@ -1,4 +1,4 @@
-#include "util/string.h"
+#include "util.h"
 
 char ToStrBuf[128];
 const char * to_string(int64_t value){
@@ -27,6 +27,8 @@ const char * to_string(int64_t value){
     return ToStrBuf;
 }
 
+// TODO: Refactor all to_hstrings to remove compiler warnings
+// Fir the `8th iteration` problem (undefined behaviour while indexing -1)
 char HexToStrBuf64[64];
 const char * to_hstring64(uint64_t value){
     uint64_t * valPtr = &value;
@@ -38,7 +40,7 @@ const char * to_hstring64(uint64_t value){
         temp = ((*ptr & 0xf0) >> 4);
         HexToStrBuf64[size - (i*2 + 1)] = temp + (temp>9 ? 55:'0');
         temp = (*ptr & 0x0f);
-        HexToStrBuf64[size - (i*2 + 0)] = temp + (temp>9 ? 55:'0');
+        HexToStrBuf64[size - (i*2)] = temp + (temp>9 ? 55:'0');
 
     }
     HexToStrBuf64[size + 1] = 0;
@@ -56,7 +58,7 @@ const char * to_hstring32(uint32_t value){
         temp = ((*ptr & 0xf0) >> 4);
         HexToStrBuf32[size - (i*2 + 1)] = temp + (temp>9 ? 55:'0');
         temp = (*ptr & 0x0f);
-        HexToStrBuf32[size - (i*2 + 0)] = temp + (temp>9 ? 55:'0');
+        HexToStrBuf32[size - (i*2)] = temp + (temp>9 ? 55:'0');
 
     }
     HexToStrBuf32[size + 1] = 0;
@@ -74,7 +76,7 @@ const char * to_hstring16(uint16_t value){
         temp = ((*ptr & 0xf0) >> 4);
         HexToStrBuf16[size - (i*2 + 1)] = temp + (temp>9 ? 55:'0');
         temp = (*ptr & 0x0f);
-        HexToStrBuf16[size - (i*2 + 0)] = temp + (temp>9 ? 55:'0');
+        HexToStrBuf16[size - (i*2)] = temp + (temp>9 ? 55:'0');
 
     }
     HexToStrBuf16[size + 1] = 0;
@@ -92,7 +94,7 @@ const char * to_hstring8(uint8_t value){
         temp = ((*ptr & 0xf0) >> 4);
         HexToStrBuf8[size - (i*2 + 1)] = temp + (temp > 9 ? 55 : '0');
         temp = (*ptr & 0x0f);
-        HexToStrBuf8[size - (i*2 + 0)] = temp + (temp > 9 ? 55 : '0');
+        HexToStrBuf8[size - (i*2)] = temp + (temp > 9 ? 55 : '0');
 
     }
     HexToStrBuf8[size + 1] = 0;
@@ -106,6 +108,12 @@ size_t strlen(const char * str){
     return size;
 }
 
+
+
+
+        //***********************************************************//
+        //------------- The Standard C Library: stdlib.h-------------//
+        //***********************************************************//
 // memmove.c
 void * memmov(void* dstptr, const void* srcptr, size_t size){
     unsigned char * dst = (unsigned char*)dstptr;
@@ -131,7 +139,7 @@ void * memset(void* bufptr, int value, size_t size){
 void * memcpy(void* __restrict dstptr, const void* __restrict srcptr, size_t size){
     unsigned char* dst = (unsigned char*)dstptr;
     const unsigned char* src = (const unsigned char*)srcptr;
-    for(size_t i = 0; i < size; i++) dst[i] == src[i];
+    for(size_t i = 0; i < size; i++) dst[i] = src[i];
     return dstptr;
 }
 

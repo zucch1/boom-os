@@ -1,0 +1,10 @@
+ - Refactor the main Makefile
+ - Change the project LICENSE
+ - Refactor the limine.cfg config file
+
+ -  Research on the following:
+    + uintptr_t and intptr_t
+    + lvalues and rvalues and [] operator overloading
+    + page-align macro
+    + Learn markdown syntax
+    

@@ -1,7 +1,7 @@
 BIN = boom.elf
-ARCH := x86_64
-CC = /usr/local/cross/bin/x86_64-elf-gcc
-INC = -I./include -Iinclude/kernel -Iinclude/kernel/memory -Iinclude/kernel/util
+ARCH = x86_64
+CC = /usr/local/cross/bin/$(ARCH)-elf-gcc
+INC = -I./include -Iinclude/kernel -Iinclude/kernel/memory -Iinclude/kernel/util -Iinclude/arch/$(ARCH)
 DEFCFLAGS := -I. -c -nostdlib -ffreestanding -fno-stack-protector -fno-pic -fpie -mno-80387 -mno-mmx -mno-3dnow -mno-sse -mno-sse2 -mno-red-zone
 DEFLDFLAGS := 			\
 		-fno-pic -fpie	\
@@ -10,7 +10,7 @@ DEFLDFLAGS := 			\
 		-nostdlib		\
 		-Tlinker.ld		\
 		-z max-page-size=0x1000
-CFLAGS = -Wall  -Wextra -O2 -pipe $(DEFCFLAGS) $(INC)
+CFLAGS = -Wall  -Wextra -O2 -pipe $(DEFCFLAGS) $(INC) -D$(ARCH)
 LDFLAGS = $(DEFLDFLAGS)
 KCFILES := $(shell find kernel -type f -name '*.cpp')
 # ACFILES := $(shell find arch/$(ARCH) -type f -name '*.cpp')
@@ -25,9 +25,9 @@ OBJS = $(CFILES:.cpp=.o)
 all: kernel disk run
 
 kernel: $(OBJS)
-	@echo --------Linking Objects--------
-	@$(CC) $(LDFLAGS) $(OBJS) -o $(BIN)
-	@echo --------Link Successful--------
+	@echo =================-Linking Objects-=================
+	$(CC) $(LDFLAGS) $(OBJS) -o $(BIN)
+	@echo =================-Link Successful-=================
 
 %.o: %.cpp
 	@echo --------Compiling $<
@@ -54,7 +54,7 @@ disk: $(BIN)
 	@rmdir img_mount
 
 run: boom.img
-	qemu-system-$(ARCH) -hda boom.img -m 256M -machine pc -cpu qemu64
+	qemu-system-x86_64 -hda boom.img -m 256M -machine pc -cpu qemu64
 
 clean:
 	rm -rf $(BIN) $(OBJS)

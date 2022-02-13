@@ -3,6 +3,7 @@
 
 #include "stdint-gcc.h"
 
+
 #if (defined (_STIVALE2_SPLIT_64) && defined (__i386__)) || defined(_STIVALE2_SPLIT_64_FORCE)
 
 #define _stivale2_split64(NAME) \
@@ -378,6 +379,14 @@ struct stivale2_struct_tag_hhdm {
     struct stivale2_tag tag;
     uint64_t addr;
 };
+
+
+//============================================================
+//
+//============================================================
+
+// returns a stivale2_tag* and needs cast
+stivale2_tag * stivale2_get_tag(stivale2_struct * stiv_struct, uint64_t id);
 
 #undef _stivale2_split64
 

@@ -1,17 +1,12 @@
 #include "memory.h"
+#include "pmm.h"    // including memory.h includes pmm.h
 
-
-
-static size_t TotalMemoryBytes = 0;
-// Returns Total RAM Size in Bytes (Usable and non-usable)
-size_t GetMemorySize(stivale2_struct * stiv_struct){
-    if(TotalMemoryBytes) return TotalMemoryBytes;
-    stivale2_struct_tag_memmap * memmap= (stivale2_struct_tag_memmap*)stivale2_get_tag(stiv_struct, STIVALE2_STRUCT_TAG_MEMMAP_ID);
-    uint64_t num = memmap->entries;
-    stivale2_mmap_entry entry;
-    for(uint64_t i = 0; i < num; i++){
-        entry = memmap->memmap[i];
-        TotalMemoryBytes += entry.length;
+static size_t size_in_bytes = 0;
+size_t get_memory_size(stivale2_struct * bootinfo){
+    if(size_in_bytes) return size_in_bytes;
+    auto mmap = (stivale2_struct_tag_memmap*)stivale2_get_tag(bootinfo, STIVALE2_STRUCT_TAG_MEMMAP_ID);
+    for(uint8_t i = 0; i < mmap->entries; i++){
+        size_in_bytes += mmap->memmap[i].length;         // Foreach entry, add its mem_size
     }
-    return TotalMemoryBytes;
+    return size_in_bytes;
 }

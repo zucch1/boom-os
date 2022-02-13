@@ -1,9 +1,8 @@
 #pragma once
 #include "stivale2.h"
-#include <stdint-gcc.h>
 #include <stddef.h>
-#include "kUtil.h"
+#define PAGE_SIZE           0x1000
+#define page_align(a)   :   ((a)-((a)%(PAGE_SIZE)))
 
-
-// Memory Size in BYTES
-size_t GetMemorySize(stivale2_struct*);
+// Returns the Total Memory Size in `number of bytes`
+size_t get_memory_size(stivale2_struct * bootinfo);
