@@ -21,7 +21,7 @@ static uint64_t ReservedMemory = 0;
 bool lock_frame(void * address){
     if(!pmm_init) return false;
     uint64_t index = (uint64_t)address/4096;
-    if(pmm_bitmap[index]) return true; 
+    if(pmm_bitmap[index] == true) return true; 
     pmm_bitmap.set(index, 1);
     FreeMemory -= 0x1000;
     UsedMemory += 0x1000;
@@ -29,8 +29,7 @@ bool lock_frame(void * address){
 }
 bool lock_frames(void * address, uint64_t n_frames){
     for(int i = 0; i < n_frames; i++){
-        if(lock_frame((void*)((uint64_t)address + (i*4096)))) continue;
-        else return false;
+        if(!lock_frame((void*)((uint64_t)address + (i*4096)))) return false;
     }
     return true;
 }
@@ -55,16 +54,15 @@ bool free_frames(void * address, uint64_t n_frames){
 bool reserve_frame(void * address){
     if(!pmm_init) return false;
     uint64_t index = (uint64_t)address/4096;
-    if(!pmm_bitmap[index]) return true; 
-    pmm_bitmap.set(index, 0);
+    if(pmm_bitmap[index]) return true; 
+    pmm_bitmap.set(index, 1);
     FreeMemory      -= 0x1000;
     ReservedMemory  += 0x1000;
     return true;
 }
 bool reserve_frames(void * address, uint64_t n_frames){
     for(int i = 0; i < n_frames; i++){
-        if(lock_frame((void*)((uint64_t)address + (i*4096)))) continue;
-        else return false;
+        if(!reserve_frame((void*)((uint64_t)address + (i*4096)))) return false;
     }
     return true;
 }
@@ -80,8 +78,7 @@ bool unreserve_frame(void * address){
 }
 bool unreserve_frames(void * address, uint64_t n_frames){
     for(int i = 0; i < n_frames; i++){
-        if(unreserve_frame((void*)((uint64_t)address + (i*4096)))) continue;
-        else return false;
+        if(!unreserve_frame((void*)((uint64_t)address + (i*4096)))) return false;
     }
     return true;
 }
