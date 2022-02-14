@@ -17,6 +17,9 @@ bool free_frames(void * address, uint64_t n_frames);
 void * request_frame();
 // void * request_frames(); //Continious frames
 
+// Returns true iff the `address` is in a locked page
+bool frame_status(void * address);
+
 size_t GetUsedMemory();
 size_t GetFreeMemory();
 size_t GetReservedMemory();

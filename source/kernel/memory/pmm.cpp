@@ -121,6 +121,11 @@ void * request_frame(){
     // Page Swapping
 }
 
+// Returns true iff the address is in a locked page
+bool frame_status(void * address){
+    return pmm_bitmap[(uint64_t)address/4096];
+}
+
 
 size_t GetUsedMemory(){
     return UsedMemory;
