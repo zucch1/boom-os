@@ -10,8 +10,8 @@ DEFLDFLAGS := 			\
 		-nostdlib		\
 		-Tlinker.ld		\
 		-z max-page-size=0x1000
-CFLAGS = -Wall  -Wextra -O2 -pipe $(DEFCFLAGS) $(INC) -D$(ARCH)
-LDFLAGS = $(DEFLDFLAGS)
+CFLAGS = -Wall  -Wextra -O2 -pipe $(DEFCFLAGS) $(INC) -D$(ARCH) --debug -masm=intel
+LDFLAGS = $(DEFLDFLAGS) --debug
 KCFILES := $(shell find kernel -type f -name '*.cpp')
 # ACFILES := $(shell find arch/$(ARCH) -type f -name '*.cpp')
 CFILES =  $(shell find  -type f -name '*.cpp') #KCFILE ACFILES
@@ -30,7 +30,7 @@ kernel: $(OBJS)
 	@echo =================-Link Successful-=================
 
 %.o: %.cpp
-	@echo --------Compiling $<
+	@echo ---------- Compiling $< ----------
 	$(CC) $(CFLAGS) $< -o $@
 
 disk: $(BIN)
