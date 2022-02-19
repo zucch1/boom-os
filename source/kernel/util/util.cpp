@@ -28,8 +28,8 @@ const char * to_string(int64_t value){
 }
 
 // TODO: Refactor all to_hstrings to remove compiler warnings
-// Fir the `8th iteration` problem (undefined behaviour while indexing -1)
-char HexToStrBuf64[64];
+// For the `8th iteration` problem (undefined behaviour while indexing -1)
+char HexToStrBuf64[67];
 const char * to_hstring64(uint64_t value){
     uint64_t * valPtr = &value;
     uint8_t * ptr;
@@ -47,7 +47,7 @@ const char * to_hstring64(uint64_t value){
     return HexToStrBuf64;
 }
 
-char HexToStrBuf32[64];
+char HexToStrBuf32[35];
 const char * to_hstring32(uint32_t value){
     uint32_t * valPtr = &value;
     uint8_t * ptr;
@@ -65,7 +65,7 @@ const char * to_hstring32(uint32_t value){
     return HexToStrBuf32;
 }
 
-char HexToStrBuf16[64];
+char HexToStrBuf16[19];
 const char * to_hstring16(uint16_t value){
     uint16_t * valPtr = &value;
     uint8_t * ptr;
@@ -83,7 +83,7 @@ const char * to_hstring16(uint16_t value){
     return HexToStrBuf16;
 }
 
-char HexToStrBuf8[64];
+char HexToStrBuf8[11];
 const char * to_hstring8(uint8_t value){
     uint8_t * valPtr = &value;
     uint8_t * ptr;
