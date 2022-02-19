@@ -85,7 +85,7 @@ bool unreserve_frames(void * address, uint64_t n_frames){
     return true;
 }
 
-//=---------------------------------------------------------=
+//=----------------------buggy--------------------------------=
 void init_pmm(stivale2_struct * bootinfo){
     if(pmm_init) return;
     pmm_init = true;
