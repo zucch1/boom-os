@@ -1,17 +1,17 @@
 #include "bitmap.h"
 
-void bitmap::set(uint8_t index, bool status){
+void bitmap::set(uint64_t index, bool status){
     uint32_t byteIndex = index/8;
-    uint32_t bitIndex = 0b10000000 >> (index % 8);
+    uint32_t bitIndex = 0b00000001 << (index % 8);
     buffer[byteIndex] &= ~bitIndex;
     if(status){
         buffer[byteIndex] |= bitIndex;
     }
 }
 
-bool bitmap::operator[](uint8_t index){
+bool bitmap::operator[](uint64_t index){
     uint32_t byteIndex = index/8;
-    uint32_t bitIndex = 0b10000000 >> (index % 8);
+    uint32_t bitIndex = 0b00000001 << (index % 8);
     return (buffer[byteIndex] & bitIndex);
 }
 

@@ -6,8 +6,8 @@ class bitmap{
 public:
     uint8_t * buffer;
     uint32_t n_bytes;
-    void set(uint8_t index, bool status);
-    bool operator[](uint8_t index);
+    void set(uint64_t index, bool status);
+    bool operator[](uint64_t index);
     bitmap();
     bitmap(uint8_t * buffer, uint32_t n_items);
 };
