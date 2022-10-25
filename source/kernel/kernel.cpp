@@ -8,9 +8,9 @@ void (*term_write)(const char *string, size_t length);
 
 void initialise_kernel(stivale2_struct * bootinfo){
     // Use the stivale2-provided terminal
-    stivale2_struct_tag_terminal * term = (stivale2_struct_tag_terminal*)stivale2_get_tag(bootinfo, STIVALE2_STRUCT_TAG_TERMINAL_ID);
-    void * term_write_ptr = (void*)term->term_write;
-    term_write = (void(*)(const char*, size_t))term_write_ptr;
+    stivale2_struct_tag_terminal * term = reinterpret_cast<stivale2_struct_tag_terminal*>(stivale2_get_tag(bootinfo, STIVALE2_STRUCT_TAG_TERMINAL_ID));
+    void * term_write_ptr = reinterpret_cast<void*>(term->term_write);
+    term_write = reinterpret_cast<void(*)(const char*, size_t)>(term_write_ptr);
     printk(" Initialising kernel:\n");
 
     // Initialise the PMM and later the VMM

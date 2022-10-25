@@ -10,7 +10,7 @@ DEFLDFLAGS := 			\
 		-nostdlib		\
 		-Tlinker.ld		\
 		-z max-page-size=0x1000
-CFLAGS = -Wall  -Wextra -O2 -pipe $(DEFCFLAGS) $(INC) -D$(ARCH) --debug -masm=intel
+CFLAGS = -Wall  -Wextra -O2 -pipe $(DEFCFLAGS) $(INC) -D$(ARCH) --debug -masm=intel -std=c++17
 LDFLAGS = $(DEFLDFLAGS) --debug
 KCFILES := $(shell find kernel -type f -name '*.cpp')
 # ACFILES := $(shell find arch/$(ARCH) -type f -name '*.cpp')
@@ -38,7 +38,7 @@ disk: $(BIN)
 	@parted -s boom.img mklabel gpt
 	@parted -s boom.img mkpart ESP fat32 2048s 100%
 	@parted -s boom.img set 1 esp on
-	@limine-install boom.img
+	@limine-deploy boom.img
 	$(eval USED_LOOPBACK = $(shell sudo losetup -Pf --show boom.img))
 	@sudo mkfs.fat -F 32 $(USED_LOOPBACK)p1
 	@mkdir -p img_mount
@@ -56,6 +56,8 @@ disk: $(BIN)
 run: boom.img
 	qemu-system-x86_64 -hda boom.img -m 256M -machine pc -cpu qemu64
 
+debug: kernel disk
+	qemu-system-x86_64 -hda boom.img -m 256M -machine pc -cpu qemu64 -s -S
 clean:
 	rm -rf $(BIN) $(OBJS)
 	

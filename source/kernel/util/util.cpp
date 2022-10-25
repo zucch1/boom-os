@@ -104,20 +104,20 @@ const char * to_hstring8(uint8_t value){
 // strlen.c
 size_t strlen(const char * str){
     size_t size = 0;
-    while(str[size]) size++;
+    while(str[size] != 0) size++;
     return size;
 }
 
 
 
 
-        //***********************************************************//
-        //------------- The Standard C Library: stdlib.h-------------//
-        //***********************************************************//
+        //************************************************************//
+        //------------- The Standard C Library: stdlib.h -------------//
+        //************************************************************//
 // memmove.c
 void * memmov(void* dstptr, const void* srcptr, size_t size){
-    unsigned char * dst = (unsigned char*)dstptr;
-    const unsigned char* src = (const unsigned char*)srcptr;
+    unsigned char * dst = reinterpret_cast<unsigned char*>(dstptr);
+    const unsigned char* src = reinterpret_cast<const unsigned char*>(srcptr);
     if(dst < src){
         for(size_t i = 0; i < size; i++) dst[i] = src[i];
     } else {
@@ -137,16 +137,16 @@ void * memset(void* bufptr, int value, size_t size){
 
 // memcpy.c
 void * memcpy(void* __restrict dstptr, const void* __restrict srcptr, size_t size){
-    unsigned char* dst = (unsigned char*)dstptr;
-    const unsigned char* src = (const unsigned char*)srcptr;
+    unsigned char* dst = reinterpret_cast<unsigned char*>(dstptr);
+    const unsigned char* src = reinterpret_cast<const unsigned char*>(srcptr);
     for(size_t i = 0; i < size; i++) dst[i] = src[i];
     return dstptr;
 }
 
 // memcmp.c
 int memcmp(const void* aptr, const void* bptr, size_t size){
-    const unsigned char* a = (const unsigned char*)aptr;
-    const unsigned char* b = (const unsigned char*)bptr;
+    const unsigned char* a = reinterpret_cast<const unsigned char*>(aptr);
+    const unsigned char* b = reinterpret_cast<const unsigned char*>(bptr);
     for(size_t i = 0; i < size; i++){
         if(a[i] < b[i]) return -1;
         else if(b[i] < a[i]) return 1;
